@@ -36,3 +36,5 @@ sysinfo.txt
 UnityLockfile
 /UnityLockfile/
 Lobby/Temp/
+Lobby/Temp*
+Library/ShaderCache*
