@@ -27,6 +27,8 @@ namespace Prototype.NetworkLobby
         public RectTransform mainMenuPanel;
         public RectTransform lobbyPanel;
 
+        public RectTransform lobbyServerPanel;
+
         public LobbyInfoPanel infoPanel;
 
         protected RectTransform currentPanel;
@@ -72,6 +74,7 @@ namespace Prototype.NetworkLobby
                 if (topPanel.isInGame)
                 {
                     ChangeTo(lobbyPanel);
+                    lobbyServerPanel.gameObject.SetActive(false);
                     if (_isMatchmaking)
                     {
                         if (conn.playerControllers[0].unetView.isServer)
@@ -85,6 +88,7 @@ namespace Prototype.NetworkLobby
                     }
                     else
                     {
+                        
                         if (conn.playerControllers[0].unetView.isClient)
                         {
                             backDelegate = StopHostClbk;
@@ -135,9 +139,11 @@ namespace Prototype.NetworkLobby
             }
             else
             {
+
+                lobbyServerPanel.gameObject.SetActive(false);
                 backButton.gameObject.SetActive(false);
                 SetServerInfo("Offline", "None");
-                _isMatchmaking = false;
+                //_isMatchmaking = false;
             }
         }
 

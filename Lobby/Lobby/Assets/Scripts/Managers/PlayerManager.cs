@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [Serializable]
-public class TankManager
+public class PlayerManager
 {
     // This class is to manage various settings on a tank.
     // It works with the GameManager class to control how the tanks behave
@@ -24,31 +24,31 @@ public class TankManager
     [HideInInspector]
     public int m_LocalPlayerID;                    // The player localID (if there is more than 1 player on the same machine)
 
-    public TankMovement m_Movement;        // References to various objects for control during the different game phases.
-    public TankShooting m_Shooting;
-    public TankHealth m_Health;
-    public TankSetup m_Setup;
+    public movement m_Movement;        // References to various objects for control during the different game phases.
+    //public TankShooting m_Shooting;
+    //public TankHealth m_Health;
+    public PlayerSetup m_Setup;
 
     public void Setup()
     {
         // Get references to the components.
-        m_Movement = m_Instance.GetComponent<TankMovement>();
-        m_Shooting = m_Instance.GetComponent<TankShooting>();
-        m_Health = m_Instance.GetComponent<TankHealth>();
-        m_Setup = m_Instance.GetComponent<TankSetup>();
+        m_Movement = m_Instance.GetComponent<movement>();
+        //m_Shooting = m_Instance.GetComponent<TankShooting>();
+        //m_Health = m_Instance.GetComponent<TankHealth>();
+        m_Setup = m_Instance.GetComponent<PlayerSetup>();
 
         // Get references to the child objects.
         //m_TankRenderers = m_Health.m_TankRenderers;
 
         //Set a reference to that amanger in the health script, to disable control when dying
-        m_Health.m_Manager = this;
+        //m_Health.m_Manager = this;
 
         // Set the player numbers to be consistent across the scripts.
         m_Movement.m_PlayerNumber = m_PlayerNumber;
         m_Movement.m_LocalID = m_LocalPlayerID;
 
-        m_Shooting.m_PlayerNumber = m_PlayerNumber;
-        m_Shooting.m_localID = m_LocalPlayerID;
+        //m_Shooting.m_PlayerNumber = m_PlayerNumber;
+        //m_Shooting.m_localID = m_LocalPlayerID;
 
         //setup is use for diverse Network Related sync
         m_Setup.m_Color = m_PlayerColor;
@@ -62,7 +62,7 @@ public class TankManager
     public void DisableControl()
     {
         m_Movement.enabled = false;
-        m_Shooting.enabled = false;
+        //m_Shooting.enabled = false;
     }
 
 
@@ -70,9 +70,8 @@ public class TankManager
     public void EnableControl()
     {
         m_Movement.enabled = true;
-        m_Shooting.enabled = true;
-
-        m_Movement.ReEnableParticles();
+        //m_Shooting.enabled = true;
+        
     }
 
     public string GetName()
@@ -81,7 +80,7 @@ public class TankManager
     }
 
     public void SetLeader(bool leader)
-    { 
+    {
         m_Setup.SetLeader(leader);
     }
 
@@ -94,8 +93,8 @@ public class TankManager
     public void Reset()
     {
         m_Movement.SetDefaults();
-        m_Shooting.SetDefaults();
-        m_Health.SetDefaults();
+        //m_Shooting.SetDefaults();
+        //m_Health.SetDefaults();
 
         if (m_Movement.hasAuthority)
         {

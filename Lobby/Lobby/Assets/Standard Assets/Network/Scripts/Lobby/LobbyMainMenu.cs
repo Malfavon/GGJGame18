@@ -24,11 +24,16 @@ namespace Prototype.NetworkLobby
 
             matchNameInput.onEndEdit.RemoveAllListeners();
             matchNameInput.onEndEdit.AddListener(onEndEditGameName);
+
+            
+
+            lobbyManager.StartMatchMaker();
         }
 
         public void OnClickHost()
         {
             lobbyManager.StartHost();
+         
         }
 
         public void OnClickJoin()
@@ -46,6 +51,7 @@ namespace Prototype.NetworkLobby
 
         public void OnClickDedicated()
         {
+            lobbyServerList.gameObject.SetActive(false);
             lobbyManager.ChangeTo(null);
             lobbyManager.StartServer();
 
@@ -57,6 +63,7 @@ namespace Prototype.NetworkLobby
         public void OnClickCreateMatchmakingGame()
         {
             lobbyManager.StartMatchMaker();
+            lobbyServerList.gameObject.SetActive(false);
             lobbyManager.matchMaker.CreateMatch(
                 matchNameInput.text,
                 (uint)lobbyManager.maxPlayers,
