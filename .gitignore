@@ -37,4 +37,11 @@ UnityLockfile
 /UnityLockfile/
 Lobby/Temp/
 Lobby/Temp*
+Temp/
+Lobby/Lobby/Temp
 Library/ShaderCache*
+ShaderCache/
+Lobby/Lobby/Library/ShaderCache/
+Lobby/Lobby/Library/LastBuild.buildreport
+Lobby/Lobby/Library/PlayerDataCache
+Lobby/Lobby/Library/shadercompiler*
