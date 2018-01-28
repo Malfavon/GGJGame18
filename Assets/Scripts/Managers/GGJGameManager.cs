@@ -87,9 +87,10 @@ public class GGJGameManager : NetworkBehaviour
         {
             if (tmp.m_Instance == tank)
             {  
-                if(tmp.m_Movement.isInfected)
+                if(tmp.m_Movement.isInfected && GameObject.Find("bomb") )
                 {
                     GameObject.Find("bomb").GetComponent<bomb>().infectingPlayer = false;
+                    GameObject.Find("bomb").GetComponent<bomb>().infectedPlayer = null;
                 }
                 toRemove = tmp;
                 break;

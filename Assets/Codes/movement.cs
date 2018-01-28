@@ -26,6 +26,10 @@ public class movement : NetworkBehaviour {
     public float m_Speed = 12f;
     public float m_SpeedInfected = 15f;
 
+    private bool hasSpeedPower = false;
+    private float pUpRemaining = 0f;
+    private float pUpStrength = 0f;
+
     public float m_TurnSpeed = 180f;
 
     private CameraControl myCam;
@@ -54,8 +58,18 @@ public class movement : NetworkBehaviour {
     {
         if (!isLocalPlayer)
             return;
-
-        Vector3 movement = transform.forward * m_MovementInput * m_Speed * Time.deltaTime;
+        float curSpeed = (isInfected) ? m_SpeedInfected : m_Speed;
+        if (hasSpeedPower)
+        {
+            curSpeed += pUpStrength;
+            pUpRemaining -= Time.deltaTime;
+            if(pUpRemaining <= 0 )
+            {
+                hasSpeedPower = false;
+                pUpRemaining = 0f;
+            }
+        }
+        Vector3 movement = transform.forward * m_MovementInput * curSpeed * Time.deltaTime;
         // Apply this movement to the rigidbody's position.
         m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
 
@@ -132,6 +146,13 @@ public class movement : NetworkBehaviour {
         {
             Debug.Log("Collided");
             hitBomb(collision.gameObject);
+        } else if(collision.gameObject.tag == "PowerUp" )
+        {
+            PowerUpScript pUp = collision.gameObject.GetComponent<PowerUpScript>();
+            hasSpeedPower = true;
+            pUpRemaining = pUp.pDuration;
+            pUpStrength = pUp.power;
+            Destroy(collision.gameObject);
         }
     }
 
