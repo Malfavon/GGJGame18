@@ -1,0 +1,221 @@
+fileFormatVersion: 2
+guid: 18fdfb9d99c2cb04dbcc5a7aa919b924
+timeCreated: 1517159608
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: group1
+    100002: turb:pCube23
+    100004: turb:pCylinder1
+    100006: turb:polySurface3
+    100008: turb:polySurface37
+    100010: turb:polySurface39
+    100012: turb:polySurface40
+    100014: turb:polySurface41
+    100016: turb:polySurface42
+    100018: turb:polySurface43
+    100020: turb:polySurface44
+    100022: turb:polySurface45
+    100024: turb:polySurface46
+    100026: turb:polySurface47
+    100028: turb:polySurface48
+    100030: turb:polySurface49
+    100032: turb:polySurface50
+    100034: turb:polySurface51
+    100036: turb:polySurface52
+    100038: turb:polySurface53
+    100040: turb:polySurface54
+    100042: turb:polySurface55
+    100044: turb:polySurface56
+    100046: turb:polySurface57
+    100048: turb:pPipe1
+    100050: turb:pPlane2
+    100052: turb:pPlane3
+    100054: turb:pPlane4
+    100056: turb:pPlane5
+    100058: turb:pPlane6
+    100060: turb:pPlane7
+    100062: turb:pPlane8
+    100064: turb:pPlane8 1
+    100066: turb:transform39
+    100068: turb:transform40
+    100070: turb:transform41
+    100072: turb:transform42
+    100074: turb:transform43
+    100076: turb:transform44
+    100078: turb:transform45
+    100080: turb:transform46
+    100082: turb:transform47
+    100084: turb:transform48
+    100086: turb:transform49
+    100088: turb:transform50
+    100090: turb:transform51
+    100092: turb:transform52
+    100094: turb:transform53
+    100096: turb:transform54
+    100098: turb:transform55
+    100100: turb:transform56
+    100102: turb:transform57
+    100104: turb:transform58
+    100106: turb:transform59
+    100108: turb:transform60
+    100110: turb:transform61
+    100112: turb:transform62
+    100114: turb:transform63
+    100116: turb:transform64
+    100118: turb:transform65
+    100120: turb:transform66
+    100122: turb:transform67
+    100124: turb:transform68
+    100126: turb:transform69
+    100128: //RootNode
+    400000: group1
+    400002: turb:pCube23
+    400004: turb:pCylinder1
+    400006: turb:polySurface3
+    400008: turb:polySurface37
+    400010: turb:polySurface39
+    400012: turb:polySurface40
+    400014: turb:polySurface41
+    400016: turb:polySurface42
+    400018: turb:polySurface43
+    400020: turb:polySurface44
+    400022: turb:polySurface45
+    400024: turb:polySurface46
+    400026: turb:polySurface47
+    400028: turb:polySurface48
+    400030: turb:polySurface49
+    400032: turb:polySurface50
+    400034: turb:polySurface51
+    400036: turb:polySurface52
+    400038: turb:polySurface53
+    400040: turb:polySurface54
+    400042: turb:polySurface55
+    400044: turb:polySurface56
+    400046: turb:polySurface57
+    400048: turb:pPipe1
+    400050: turb:pPlane2
+    400052: turb:pPlane3
+    400054: turb:pPlane4
+    400056: turb:pPlane5
+    400058: turb:pPlane6
+    400060: turb:pPlane7
+    400062: turb:pPlane8
+    400064: turb:pPlane8 1
+    400066: turb:transform39
+    400068: turb:transform40
+    400070: turb:transform41
+    400072: turb:transform42
+    400074: turb:transform43
+    400076: turb:transform44
+    400078: turb:transform45
+    400080: turb:transform46
+    400082: turb:transform47
+    400084: turb:transform48
+    400086: turb:transform49
+    400088: turb:transform50
+    400090: turb:transform51
+    400092: turb:transform52
+    400094: turb:transform53
+    400096: turb:transform54
+    400098: turb:transform55
+    400100: turb:transform56
+    400102: turb:transform57
+    400104: turb:transform58
+    400106: turb:transform59
+    400108: turb:transform60
+    400110: turb:transform61
+    400112: turb:transform62
+    400114: turb:transform63
+    400116: turb:transform64
+    400118: turb:transform65
+    400120: turb:transform66
+    400122: turb:transform67
+    400124: turb:transform68
+    400126: turb:transform69
+    400128: //RootNode
+    2100000: turb_cadenas
+    2300000: turb:pPlane8
+    3300000: turb:pPlane8
+    4300000: turb:pPlane8
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
