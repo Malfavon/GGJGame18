@@ -11,6 +11,7 @@ public class movement : NetworkBehaviour {
     public Rigidbody m_Rigidbody;
     public static Vector3 charPosition;  //variable para enviar a otro codigo la posicion del personaje
     public static bool mine; //variable para ver si tu personaje tiene la bomba
+    public bool isInfected = false;
     private float energy; //variable para almacenar energia acumulada del personaje
     public Slider myEnergy; //slider que mostrara cuanta energia has acumulado
     public static GameObject thisObject;
@@ -36,16 +37,14 @@ public class movement : NetworkBehaviour {
         {
             Debug.Log("Setting up local player ("+m_PlayerNumber+") energy bar and camera");
             myEnergy = GameObject.Find("Energy Slider").GetComponent<Slider>();
-            myCam = GameObject.Find("CameraRig").GetComponent<CameraControl>();
-            myCam.gameObject.transform.parent = this.gameObject.transform;
+            myCam = transform.Find("CameraRig").GetComponent<CameraControl>();
+            myCam.gameObject.SetActive(true);
+            //myCam.gameObject.transform.parent = this.gameObject.transform;
             myCam.gameObject.transform.localPosition = new Vector3(0, 0, 0);
             myCam.SetTarget(this.gameObject);
 
             
-        } else
-        {
-            //transform.gameObject.Find("CameraRig").SetActive(false);
-        }
+        } 
     }
 
     
@@ -70,14 +69,22 @@ public class movement : NetworkBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (!isLocalPlayer)
+        if (!isLocalPlayer )
         {
             return;
         }
-        if (mine && myEnergy )
+
+        /** do this in bomb on server side
+        if (isInfected && myEnergy )
         {
-            myEnergy.value += Time.deltaTime * 10;
+            myEnergy.value += Time.deltaTime * 5 ;
+            if(myEnergy.value >= 100.0f)
+            {
+
+                GGJGameManager.s_Instance.RemoveTank(transform.gameObject);
+            }
         }
+        **/
 
         m_TurnInput = Input.GetAxis("Horizontal");
         m_MovementInput = Input.GetAxis("Vertical");
@@ -100,14 +107,31 @@ public class movement : NetworkBehaviour {
         
     }
 
+    public void GoBOOM()
+    {
+        //move player camera to scene so it doesnt get deleted
+        Transform cam = transform.Find("CameraRig");
+        cam.gameObject.name = "DeadCamera";
+        cam.parent = null;
+        cam.position = new Vector3(0.0f, 10.0f, 0.0f);
+        cam.Find("Main Camera").LookAt(transform);
+        this.gameObject.SetActive(false);
+        //Destroy(this.gameObject, 1);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (mine == false)
+        if (isInfected == false && collision.gameObject.name == "bomb")
         {
             Debug.Log("Collided");
-            //thisObject=this.gameObject;
-            //charPosition = thisObject.transform.position;
-            mine = !mine;
+            if (collision.gameObject.GetComponent<bomb>().infectingPlayer) {
+                collision.gameObject.GetComponent<bomb>().infectedPlayer.m_Movement.isInfected = false;
+                collision.gameObject.GetComponent<bomb>().infectedPlayer.m_Movement.myEnergy.value = 0;
+            }
+
+            collision.gameObject.GetComponent<bomb>().infectedPlayer = GGJGameManager.m_Tanks[m_PlayerNumber];
+            isInfected = true;
+            collision.gameObject.GetComponent<bomb>().infectingPlayer = true;
         }
     }
 }

@@ -24,6 +24,8 @@ public class PlayerManager
     [HideInInspector]
     public int m_LocalPlayerID;                    // The player localID (if there is more than 1 player on the same machine)
 
+    public bool isDead = false;
+
     public movement m_Movement;        // References to various objects for control during the different game phases.
     //public TankShooting m_Shooting;
     //public TankHealth m_Health;
@@ -63,6 +65,7 @@ public class PlayerManager
     public void DisableControl()
     {
         m_Movement.enabled = false;
+        m_Movement.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         //m_Shooting.enabled = false;
     }
 
@@ -70,9 +73,11 @@ public class PlayerManager
     // Used during the phases of the game where the player should be able to control their tank.
     public void EnableControl()
     {
+        Debug.Log("Unfreezing rigidbody");
         m_Movement.enabled = true;
+        m_Movement.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         //m_Shooting.enabled = true;
-        
+
     }
 
     public string GetName()

@@ -80,20 +80,26 @@ public class GGJGameManager : NetworkBehaviour
         foreach (var tmp in m_Tanks)
         {
             if (tmp.m_Instance == tank)
-            {
+            {  
+                if(tmp.m_Movement.isInfected)
+                {
+                    GameObject.Find("bomb").GetComponent<bomb>().infectingPlayer = false;
+                }
                 toRemove = tmp;
                 break;
             }
         }
 
         if (toRemove != null)
+        {
             m_Tanks.Remove(toRemove);
+        }
     }
 
     // This is called from start and will run each phase of the game one after another. ONLY ON SERVER (as Start is only called on server)
     private IEnumerator GameLoop()
     {
-        while (m_Tanks.Count < 2)
+        while (m_Tanks.Count < 1)
             yield return null;
 
         //wait to be sure that all are ready to start
@@ -153,7 +159,8 @@ public class GGJGameManager : NetworkBehaviour
     {
         //assign bomb on server
         Debug.Log("RoundStarting on Server");
-        GameObject.Find("bomb").GetComponent<bomb>().Setup();
+        ResetAllTanks();
+        //GameObject.Find("bomb").GetComponent<bomb>().Setup();
         //we notify all clients that the round is starting
         RpcRoundStarting();
 
@@ -166,7 +173,7 @@ public class GGJGameManager : NetworkBehaviour
     {
         // As soon as the round starts reset the tanks and make sure they can't move.
         Debug.Log("RPCRoundStarting");
-        ResetAllTanks();
+        
         DisableTankControl();
 
         // Snap the camera's zoom and position to something appropriate for the reset tanks.
@@ -199,8 +206,8 @@ public class GGJGameManager : NetworkBehaviour
             elapsedTime += Time.deltaTime;
 
             //sometime, synchronization lag behind because of packet drop, so we make sure our tank are reseted
-            if (elapsedTime / wait < 0.5f)
-                ResetAllTanks();
+           // if (elapsedTime / wait < 0.5f)
+           //     ResetAllTanks();
 
             yield return null;
         }
@@ -209,6 +216,7 @@ public class GGJGameManager : NetworkBehaviour
     private IEnumerator RoundPlaying()
     {
         //notify clients that the round is now started, they should allow player to move.
+       
         RpcRoundPlaying();
 
         // While there is not one tank left...
@@ -222,6 +230,12 @@ public class GGJGameManager : NetworkBehaviour
     [ClientRpc]
     void RpcRoundPlaying()
     {
+
+        Debug.Log("Round is playing now");
+        if (GameObject.Find("bomb"))
+        {
+            GameObject.Find("bomb").GetComponent<bomb>().Setup();
+        }
         // As soon as the round begins playing let the players control the tanks.
         EnableTankControl();
 
