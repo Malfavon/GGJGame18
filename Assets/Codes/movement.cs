@@ -148,11 +148,15 @@ public class movement : NetworkBehaviour {
             hitBomb(collision.gameObject);
         } else if(collision.gameObject.tag == "PowerUp" )
         {
+            Debug.Log("POwer UP");
             PowerUpScript pUp = collision.gameObject.GetComponent<PowerUpScript>();
             hasSpeedPower = true;
             pUpRemaining = pUp.pDuration;
             pUpStrength = pUp.power;
             Destroy(collision.gameObject);
+        } else
+        {
+            Debug.Log("Collide " + collision.gameObject.name);
         }
     }
 

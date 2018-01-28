@@ -35,51 +35,75 @@ public class bomb : NetworkBehaviour {
         //infectingPlayer = true;
         target = FindClosestPlayer();
         isChasing = true;
+
+        //ignore physics so bomb doesn't knock players off world
+        GameObject[] gos;
+        gos = GameObject.FindGameObjectsWithTag("Player");
+        Collider bCol = transform.Find("bombPhysics").GetComponent<Collider>();
+        foreach (GameObject go in gos)
+        {
+            Physics.IgnoreCollision(go.GetComponent<Collider>(), bCol);
+        }
     }
 	
 	// Update is called once per frame
 	void Update () {
         if (noActivePlayers) return;
+        if (infectedPlayer == null)
+        {
+            infectingPlayer = false;
+        }
         if (infectingPlayer)
         {
+           
             transform.position =  new Vector3(infectedPlayer.m_Instance.transform.position.x, infectedPlayer.m_Instance.transform.position.y+1.2f, infectedPlayer.m_Instance.transform.position.z);
             
             infectedPlayer.m_Movement.myEnergy.value += Time.deltaTime * boomSpeed;
             if (infectedPlayer.m_Movement.myEnergy.value >= 95.0f)
             {
                 Debug.Log("Player " + infectedPlayer.m_Movement.m_PlayerNumber + " GO BOOM");
-                GGJGameManager.s_Instance.RemoveTank(infectedPlayer.m_Movement.transform.gameObject);
                 infectedPlayer.isDead = true;
                 infectedPlayer.m_Movement.GoBOOM();
+                GGJGameManager.s_Instance.RemoveTank(infectedPlayer.m_Movement.transform.gameObject);
+
                 infectedPlayer = null;
                 infectingPlayer = false;
                 isChasing = true;
                 
             }
             
-        } else if(isChasing )
+        } else if(isChasing  )
         {
-            Vector3 diff = target.transform.position - transform.position;
-            float curDistance = diff.sqrMagnitude;
-            if (curDistance > maxChaseDist)
+            float curDistance = 0f;
+            if (target != null && target.activeSelf)
+            {
+                Vector3 diff = target.transform.position - transform.position;
+                curDistance = diff.sqrMagnitude;
+            }
+            if (target == null || !target.activeSelf ||  curDistance > maxChaseDist)
             {
                 target = FindClosestPlayer();
                 if (!target)
                 {
                     noActivePlayers = true;
                     Debug.Log("No more active players to chase");
+                    return;
                 }
-                Debug.Log("Chasing " + target.name);
             } else if(curDistance < 1 )
             {
                 Debug.Log("BOOM");
                 infectingPlayer = true;
+                isChasing = false;
                 infectedPlayer = GGJGameManager.m_Tanks[target.GetComponent<movement>().m_PlayerNumber];
                 target.GetComponent<movement>().hitBomb(transform.gameObject);
                 return;
             }
-            float step = chaseSpeed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, step);
+
+            if (target != null)
+            {
+                float step = chaseSpeed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, step);
+            }
         }
 
     }

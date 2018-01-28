@@ -285,6 +285,7 @@ public class GGJGameManager : NetworkBehaviour
     [ClientRpc]
     private void RpcUpdateMessage(string msg)
     {
+        if (m_MessageText == null) return;
         m_MessageText.text = msg;
     }
 

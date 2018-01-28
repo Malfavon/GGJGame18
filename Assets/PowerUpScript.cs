@@ -18,4 +18,10 @@ public class PowerUpScript : NetworkBehaviour {
 	void Update () {
 		
 	}
+
+    private void OnCollisionEnter(Collision collision)
+    {
+            Debug.Log("PUP Collide " + collision.gameObject.name);     
+    }
+
 }
