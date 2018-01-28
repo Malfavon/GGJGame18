@@ -17,7 +17,7 @@ public class GGJGameManager : NetworkBehaviour
     public float m_EndDelay = 3f;             // The delay between the end of RoundPlaying and RoundEnding phases.
     public CameraControl m_CameraControl;     // Reference to the CameraControl script for control during different phases.
     public Text m_MessageText;                // Reference to the overlay Text to display winning text, etc.
-    public GameObject m_TankPrefab;           // Reference to the prefab the players will control.
+    public static GameObject m_TankPrefab;           // Reference to the prefab the players will control.
 
     public Transform[] m_SpawnPoint;
 

@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class movement : NetworkBehaviour {
 
     public float speed;
 	public float MaxSpeed;
     public Rigidbody m_Rigidbody;
+    public static Vector3 charPosition;  //variable para enviar a otro codigo la posicion del personaje
+    public static bool mine; //variable para ver si tu personaje tiene la bomba
+    private float energy; //variable para almacenar energia acumulada del personaje
+    public Slider myEnergy; //slider que mostrara cuanta energia has acumulado
+    public static GameObject thisObject;
 
     public int m_PlayerNumber = 1;                // Used to identify which player this object belongs to
     public int m_LocalID = 1;
@@ -20,6 +26,7 @@ public class movement : NetworkBehaviour {
     // Use this for initialization
     void Start () {
         m_Rigidbody = GetComponent<Rigidbody>();
+        //myEnergy.value = 48;
     }
 
     void FixedUpdate()
@@ -27,10 +34,12 @@ public class movement : NetworkBehaviour {
         if (!isLocalPlayer)
             return;
 
+        
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
-
+        //charPosition = transform.position;  //toma la posicion actual del personaje
 		Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        
 
 
 		m_Rigidbody.velocity = movement * speed;
@@ -40,8 +49,15 @@ public class movement : NetworkBehaviour {
 
     // Update is called once per frame
     void Update () {
+        if (mine)
+        {
+            myEnergy.value += Time.time;
+        }
         if (!isLocalPlayer)
+        {
             return;
+        }
+       
     }
 
 	void LimitVelocity() {
@@ -57,5 +73,15 @@ public class movement : NetworkBehaviour {
         m_Rigidbody.velocity = Vector3.zero;
         m_Rigidbody.angularVelocity = Vector3.zero;
         
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (mine == false)
+        {
+            thisObject=this.gameObject;
+            charPosition = thisObject.transform.position;
+            mine = !mine;
+        }
     }
 }
