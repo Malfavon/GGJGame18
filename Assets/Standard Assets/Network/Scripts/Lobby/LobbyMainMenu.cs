@@ -80,9 +80,11 @@ namespace Prototype.NetworkLobby
 
         public void OnClickOpenServerList()
         {
-            lobbyManager.StartMatchMaker();
-            lobbyManager.backDelegate = lobbyManager.SimpleBackClbk;
-            lobbyManager.ChangeTo(lobbyServerList);
+            //lobbyManager.StartMatchMaker();
+            lobbyManager.lobbyDirectPanel.gameObject.SetActive(false);
+            lobbyManager.lobbyServerPanel.gameObject.SetActive(true);
+            //lobbyManager.backDelegate = lobbyManager.SimpleBackClbk;
+            //lobbyManager.ChangeTo(lobbyServerList);
         }
 
         void onEndEditIP(string text)

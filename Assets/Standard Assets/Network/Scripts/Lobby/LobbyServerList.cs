@@ -73,11 +73,23 @@ namespace Prototype.NetworkLobby
             RequestPage(newPage);
         }
 
+        public void LoadDirectPlay()
+        {
+            lobbyManager.lobbyServerPanel.gameObject.SetActive(false);
+            lobbyManager.lobbyDirectPanel.gameObject.SetActive(true);
+            lobbyManager.lobbyServerPanel.GetComponent<LobbyServerList>().RequestPage(0);
+
+        }
+
         public void RequestPage(int page)
         {
+            if (!lobbyManager._isMatchmaking) return;
+
             previousPage = currentPage;
             currentPage = page;
-			lobbyManager.matchMaker.ListMatches(page, 6, "", true, 0, 0, OnGUIMatchList);
+            
+            lobbyManager.matchMaker.ListMatches(page, 6, "", true, 0, 0, OnGUIMatchList);
+            
 		}
     }
 }

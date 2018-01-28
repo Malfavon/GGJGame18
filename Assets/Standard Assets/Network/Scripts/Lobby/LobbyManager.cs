@@ -31,6 +31,8 @@ namespace Prototype.NetworkLobby
 
         public LobbyInfoPanel infoPanel;
 
+        public RectTransform lobbyDirectPanel;
+
         protected RectTransform currentPanel;
 
         public Button backButton;
@@ -65,6 +67,11 @@ namespace Prototype.NetworkLobby
             DontDestroyOnLoad(gameObject);
 
             SetServerInfo("Offline", "None");
+
+            _isMatchmaking = true;
+            StartMatchMaker();
+            Debug.Log("Started matchmaker");
+            lobbyServerPanel.GetComponent<LobbyServerList>().RequestPage(0);
         }
 
         public override void OnLobbyClientSceneChanged(NetworkConnection conn)
@@ -74,7 +81,6 @@ namespace Prototype.NetworkLobby
                 if (topPanel.isInGame)
                 {
                     ChangeTo(lobbyPanel);
-                    lobbyServerPanel.gameObject.SetActive(false);
                     if (_isMatchmaking)
                     {
                         if (conn.playerControllers[0].unetView.isServer)
@@ -109,6 +115,7 @@ namespace Prototype.NetworkLobby
             }
             else
             {
+                lobbyServerPanel.gameObject.SetActive(false);
                 ChangeTo(null);
 
                 Destroy(GameObject.Find("MainMenuUI(Clone)"));
@@ -135,15 +142,18 @@ namespace Prototype.NetworkLobby
 
             if (currentPanel != mainMenuPanel)
             {
+                lobbyServerPanel.gameObject.SetActive(false);
                 backButton.gameObject.SetActive(true);
             }
             else
             {
 
-                lobbyServerPanel.gameObject.SetActive(false);
+                lobbyServerPanel.gameObject.SetActive(true);
+                lobbyServerPanel.GetComponent<LobbyServerList>().RequestPage(0);
                 backButton.gameObject.SetActive(false);
                 SetServerInfo("Offline", "None");
-                //_isMatchmaking = false;
+                if (!_isMatchmaking) StartMatchMaker();
+                _isMatchmaking = true;
             }
         }
 
@@ -206,7 +216,7 @@ namespace Prototype.NetworkLobby
 
             if (_isMatchmaking)
             {
-                StopMatchMaker();
+                //StopMatchMaker();
             }
 
             ChangeTo(mainMenuPanel);
@@ -255,7 +265,7 @@ namespace Prototype.NetworkLobby
 			base.OnDestroyMatch(success, extendedInfo);
 			if (_disconnectServer)
             {
-                StopMatchMaker();
+                //StopMatchMaker();
                 StopHost();
             }
         }
@@ -340,7 +350,8 @@ namespace Prototype.NetworkLobby
 
         public override void OnLobbyServerPlayersReady()
         {
-			bool allready = true;
+            lobbyServerPanel.gameObject.SetActive(false);
+            bool allready = true;
 			for(int i = 0; i < lobbySlots.Length; ++i)
 			{
 				if(lobbySlots[i] != null)

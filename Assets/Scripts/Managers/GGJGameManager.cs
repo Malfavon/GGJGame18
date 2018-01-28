@@ -170,7 +170,7 @@ public class GGJGameManager : NetworkBehaviour
 
         // Increment the round number and display text showing the players what round it is.
         m_RoundNumber++;
-        m_MessageText.text = "ROUND " + m_RoundNumber;
+        //m_MessageText.text = "ROUND " + m_RoundNumber;
 
 
         StartCoroutine(ClientRoundStartingFade());
@@ -185,10 +185,12 @@ public class GGJGameManager : NetworkBehaviour
 
         while (elapsedTime < wait)
         {
+            /*
             if (m_RoundNumber == 1)
-                m_FadingScreen.alpha = 1.0f - (elapsedTime / wait);
+                //m_FadingScreen.alpha = 1.0f - (elapsedTime / wait);
             else
-                m_EndRoundScreen.alpha = 1.0f - (elapsedTime / wait);
+                //m_EndRoundScreen.alpha = 1.0f - (elapsedTime / wait);
+            */
 
             elapsedTime += Time.deltaTime;
 
@@ -220,7 +222,7 @@ public class GGJGameManager : NetworkBehaviour
         EnableTankControl();
 
         // Clear the text from the screen.
-        m_MessageText.text = string.Empty;
+        //m_MessageText.text = string.Empty;
     }
 
     private IEnumerator RoundEnding()
