@@ -117,6 +117,11 @@ public class movement : NetworkBehaviour {
         cam.Find("Main Camera").LookAt(transform);
         this.gameObject.SetActive(false);
         //Destroy(this.gameObject, 1);
+        GameObject.Find("Canvas").GetComponent<AudioSource>().Stop();
+        GameObject.Find("Canvas").GetComponent<AudioSource>().clip = GGJGameManager.s_Instance.youLoseClip;
+        GameObject.Find("Canvas").GetComponent<AudioSource>().loop = false;
+        GameObject.Find("Canvas").GetComponent<AudioSource>().Play();
+        GGJGameManager.s_Instance.m_EndRoundScreen.alpha = 1.0f;
     }
 
     private void OnCollisionEnter(Collision collision)

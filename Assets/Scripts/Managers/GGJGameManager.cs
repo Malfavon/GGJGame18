@@ -37,6 +37,10 @@ public class GGJGameManager : NetworkBehaviour
     private PlayerManager m_RoundWinner;          // Reference to the winner of the current round.  Used to make an announcement of who won.
     private PlayerManager m_GameWinner;           // Reference to the winner of the game.  Used to make an announcement of who won.
 
+    public AudioClip youLoseClip;
+    public AudioClip youWinClip;
+    
+
     void Awake()
     {
         s_Instance = this;
@@ -196,12 +200,12 @@ public class GGJGameManager : NetworkBehaviour
 
         while (elapsedTime < wait)
         {
-            /*
+            
             if (m_RoundNumber == 1)
-                //m_FadingScreen.alpha = 1.0f - (elapsedTime / wait);
+                m_FadingScreen.alpha = 1.0f - (elapsedTime / wait);
             else
-                //m_EndRoundScreen.alpha = 1.0f - (elapsedTime / wait);
-            */
+                m_EndRoundScreen.alpha = 1.0f - (elapsedTime / wait);
+            
 
             elapsedTime += Time.deltaTime;
 

@@ -9,7 +9,7 @@ public class bomb : NetworkBehaviour {
     public PlayerManager infectedPlayer; //saber que jugador tiene la bomba
     public bool infectingPlayer = false;
 
-    public float boomSpeed = 10.0f;
+    public float boomSpeed = 6.0f;
 
 	// Use this for initialization
 	void Start () {
