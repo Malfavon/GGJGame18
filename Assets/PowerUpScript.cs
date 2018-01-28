@@ -16,8 +16,9 @@ public class PowerUpScript : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        transform.Rotate(Vector3.up * Time.deltaTime * 35);
+
+    }
 
     private void OnCollisionEnter(Collision collision)
     {

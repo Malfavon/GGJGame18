@@ -12,12 +12,16 @@ public class GGJGameManager : NetworkBehaviour
     //this is static so tank can be added even withotu the scene loaded (i.e. from lobby)
     static public List<PlayerManager> m_Tanks = new List<PlayerManager>();             // A collection of managers for enabling and disabling different aspects of the tanks.
 
+    public List<PowerUpScript> m_PowerUps = new List<PowerUpScript>();
+
     public int m_NumRoundsToWin = 5;          // The number of rounds a single player has to win to win the game.
     public float m_StartDelay = 3f;           // The delay between the start of RoundStarting and RoundPlaying phases.
     public float m_EndDelay = 3f;             // The delay between the end of RoundPlaying and RoundEnding phases.
     public CameraControl m_CameraControl;     // Reference to the CameraControl script for control during different phases.
     public Text m_MessageText;                // Reference to the overlay Text to display winning text, etc.
     public static GameObject m_TankPrefab;           // Reference to the prefab the players will control.
+
+    public GameObject m_PowerUpPrefab;
 
     public Transform[] m_SpawnPoint;
 
@@ -78,6 +82,25 @@ public class GGJGameManager : NetworkBehaviour
         tmp.Setup();
 
         m_Tanks.Add(tmp);
+    }
+
+    public void resetPowerUps()
+    {
+        foreach( PowerUpScript ps in m_PowerUps)
+        {
+            Destroy(ps.gameObject);
+        }
+        m_PowerUps = new List<PowerUpScript>();
+    }
+
+    public void maybeAddPowerUp()
+    {
+        if (m_PowerUps.Count > 3 || Random.value > 0.15f) return;
+        GameObject obj = Instantiate(m_PowerUpPrefab.gameObject) as GameObject;
+        obj.transform.rotation = Quaternion.identity;
+        obj.transform.position = new Vector3(24f * Random.value-12f,2f, 30f * Random.value - 15f);
+        
+        m_PowerUps.Add(obj.GetComponent<PowerUpScript>());
     }
 
     public void RemoveTank(GameObject tank)
@@ -167,6 +190,7 @@ public class GGJGameManager : NetworkBehaviour
         //assign bomb on server
         Debug.Log("RoundStarting on Server");
         ResetAllTanks();
+        resetPowerUps();
         //GameObject.Find("bomb").GetComponent<bomb>().Setup();
         //we notify all clients that the round is starting
         RpcRoundStarting();
@@ -229,6 +253,7 @@ public class GGJGameManager : NetworkBehaviour
         // While there is not one tank left...
         while (!OneTankLeft())
         {
+            maybeAddPowerUp();
             // ... return on the next frame.
             yield return null;
         }
