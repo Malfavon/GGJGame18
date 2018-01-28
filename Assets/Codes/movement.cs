@@ -24,6 +24,7 @@ public class movement : NetworkBehaviour {
     private float m_MovementInput;              // The current value of the movement input.
     private float m_TurnInput;                  // The current value of the turn input.
     public float m_Speed = 12f;
+    public float m_SpeedInfected = 15f;
 
     public float m_TurnSpeed = 180f;
 
@@ -111,6 +112,7 @@ public class movement : NetworkBehaviour {
     {
         //move player camera to scene so it doesnt get deleted
         Transform cam = transform.Find("CameraRig");
+        if (!cam) return;
         cam.gameObject.name = "DeadCamera";
         cam.parent = null;
         cam.position = new Vector3(0.0f, 10.0f, 0.0f);
@@ -129,14 +131,20 @@ public class movement : NetworkBehaviour {
         if (isInfected == false && collision.gameObject.name == "bomb")
         {
             Debug.Log("Collided");
-            if (collision.gameObject.GetComponent<bomb>().infectingPlayer) {
-                collision.gameObject.GetComponent<bomb>().infectedPlayer.m_Movement.isInfected = false;
-                collision.gameObject.GetComponent<bomb>().infectedPlayer.m_Movement.myEnergy.value = 0;
-            }
-
-            collision.gameObject.GetComponent<bomb>().infectedPlayer = GGJGameManager.m_Tanks[m_PlayerNumber];
-            isInfected = true;
-            collision.gameObject.GetComponent<bomb>().infectingPlayer = true;
+            hitBomb(collision.gameObject);
         }
+    }
+
+    public void hitBomb( GameObject b)
+    {
+        if (b.GetComponent<bomb>().infectingPlayer)
+        {
+            b.GetComponent<bomb>().infectedPlayer.m_Movement.isInfected = false;
+            b.GetComponent<bomb>().infectedPlayer.m_Movement.myEnergy.value = 0;
+        }
+
+        b.GetComponent<bomb>().infectedPlayer = GGJGameManager.m_Tanks[m_PlayerNumber];
+        isInfected = true;
+        b.GetComponent<bomb>().infectingPlayer = true;
     }
 }

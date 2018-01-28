@@ -21,6 +21,8 @@ public class GGJGameManager : NetworkBehaviour
 
     public Transform[] m_SpawnPoint;
 
+    public bomb daBomb = null;
+
     [HideInInspector]
     [SyncVar]
     public bool m_GameIsFinished = false;
@@ -238,6 +240,7 @@ public class GGJGameManager : NetworkBehaviour
         Debug.Log("Round is playing now");
         if (GameObject.Find("bomb"))
         {
+            daBomb = GameObject.Find("bomb").GetComponent<bomb>();
             GameObject.Find("bomb").GetComponent<bomb>().Setup();
         }
         // As soon as the round begins playing let the players control the tanks.
@@ -300,6 +303,8 @@ public class GGJGameManager : NetworkBehaviour
     // This is used to check if there is one or fewer tanks remaining and thus the round should end.
     private bool OneTankLeft()
     {
+        if (daBomb && daBomb.noActivePlayers) return true;
+
         return false;
         // Start the count of tanks left at zero.
         int numTanksLeft = 0;

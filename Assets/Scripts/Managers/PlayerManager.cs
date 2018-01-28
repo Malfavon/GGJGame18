@@ -73,6 +73,7 @@ public class PlayerManager
     // Used during the phases of the game where the player should be able to control their tank.
     public void EnableControl()
     {
+        m_Movement.transform.LookAt(GameObject.Find("bomb").transform);
         Debug.Log("Unfreezing rigidbody");
         m_Movement.enabled = true;
         m_Movement.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
