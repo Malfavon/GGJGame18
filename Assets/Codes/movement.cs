@@ -14,6 +14,7 @@ public class movement : NetworkBehaviour {
     private float energy; //variable para almacenar energia acumulada del personaje
     public Slider myEnergy; //slider que mostrara cuanta energia has acumulado
     public static GameObject thisObject;
+    public static bool dead = false;
 
     public int m_PlayerNumber = 1;                // Used to identify which player this object belongs to
     public int m_LocalID = 1;
@@ -65,13 +66,20 @@ public class movement : NetworkBehaviour {
 
     // Update is called once per frame
     void Update () {
+
+        charPosition = thisObject.transform.position;
         if (!isLocalPlayer)
         {
             return;
         }
         if (mine && myEnergy )
         {
-            myEnergy.value += Time.deltaTime * 10;
+            //myEnergy.value += Time.deltaTime * 10;
+            myEnergy.value++;
+            if (myEnergy.value >= 100)
+            {
+                Destroy(this.gameObject, 1);
+            }
         }
 
         m_TurnInput = Input.GetAxis("Horizontal");
@@ -101,7 +109,11 @@ public class movement : NetworkBehaviour {
         {
             Debug.Log("Collided");
             thisObject=this.gameObject;
-            charPosition = thisObject.transform.position;
+            
+            mine = !mine;
+        }
+        else if (mine == true)
+        {
             mine = !mine;
         }
     }

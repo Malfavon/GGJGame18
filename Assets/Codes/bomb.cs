@@ -19,7 +19,7 @@ public class bomb : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        transform.position = movement.charPosition;
+        transform.position = new Vector3 (movement.charPosition.x - 1, movement.charPosition.y, movement.charPosition.z);
 
     }
 
