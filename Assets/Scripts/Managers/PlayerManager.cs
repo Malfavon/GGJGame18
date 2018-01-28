@@ -55,6 +55,7 @@ public class PlayerManager
         m_Setup.m_PlayerName = m_PlayerName;
         m_Setup.m_PlayerNumber = m_PlayerNumber;
         m_Setup.m_LocalID = m_LocalPlayerID;
+        
     }
 
 
@@ -98,6 +99,7 @@ public class PlayerManager
 
         if (m_Movement.hasAuthority)
         {
+            Debug.Log("Setting position to spawn at " + m_SpawnPoint.ToString());
             m_Movement.m_Rigidbody.position = m_SpawnPoint.position;
             m_Movement.m_Rigidbody.rotation = m_SpawnPoint.rotation;
         }

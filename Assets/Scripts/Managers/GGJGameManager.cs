@@ -151,6 +151,9 @@ public class GGJGameManager : NetworkBehaviour
 
     private IEnumerator RoundStarting()
     {
+        //assign bomb on server
+        Debug.Log("RoundStarting on Server");
+        GameObject.Find("bomb").GetComponent<bomb>().Setup();
         //we notify all clients that the round is starting
         RpcRoundStarting();
 
@@ -162,11 +165,12 @@ public class GGJGameManager : NetworkBehaviour
     void RpcRoundStarting()
     {
         // As soon as the round starts reset the tanks and make sure they can't move.
+        Debug.Log("RPCRoundStarting");
         ResetAllTanks();
         DisableTankControl();
 
         // Snap the camera's zoom and position to something appropriate for the reset tanks.
-        m_CameraControl.SetAppropriatePositionAndSize();
+        //m_CameraControl.SetAppropriatePositionAndSize();
 
         // Increment the round number and display text showing the players what round it is.
         m_RoundNumber++;
@@ -278,6 +282,7 @@ public class GGJGameManager : NetworkBehaviour
     // This is used to check if there is one or fewer tanks remaining and thus the round should end.
     private bool OneTankLeft()
     {
+        return false;
         // Start the count of tanks left at zero.
         int numTanksLeft = 0;
 
@@ -290,7 +295,7 @@ public class GGJGameManager : NetworkBehaviour
         }
 
         // If there are one or fewer tanks remaining return true, otherwise return false.
-        return numTanksLeft <= 1;
+        return numTanksLeft <= 0;
     }
 
 
@@ -298,6 +303,7 @@ public class GGJGameManager : NetworkBehaviour
     // This function is called with the assumption that 1 or fewer tanks are currently active.
     private PlayerManager GetRoundWinner()
     {
+        return null;
         // Go through all the tanks...
         for (int i = 0; i < m_Tanks.Count; i++)
         {
@@ -380,6 +386,8 @@ public class GGJGameManager : NetworkBehaviour
             m_Tanks[i].m_SpawnPoint = m_SpawnPoint[m_Tanks[i].m_Setup.m_PlayerNumber];
             m_Tanks[i].Reset();
         }
+
+        
     }
 
 

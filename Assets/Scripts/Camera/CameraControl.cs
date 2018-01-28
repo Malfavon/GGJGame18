@@ -33,7 +33,8 @@ public class CameraControl : MonoBehaviour
     public void SetTarget(GameObject t)
     {
         target = t;
-        transform.LookAt(target.transform);
+        Vector3 newLook = new Vector3(target.transform.position.x, target.transform.position.y + 1.5f, target.transform.position.z);
+        m_Camera.transform.LookAt(newLook);
     }
 
     private void SetDistanceToSize()

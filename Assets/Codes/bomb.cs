@@ -1,25 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class bomb : MonoBehaviour {
+public class bomb : NetworkBehaviour {
 
     private int firstFollow;
-    public static PlayerManager infectedPlayer; //saber que jugador tiene la bomba
+    public PlayerManager infectedPlayer; //saber que jugador tiene la bomba
+    private bool infectingPlayer = false;
 
 	// Use this for initialization
 	void Start () {
 
-        firstFollow = Random.Range(0, GGJGameManager.m_Tanks.Count);
-        infectedPlayer = GGJGameManager.m_Tanks[firstFollow];
+       
         //firstPick();
 		
 	}
+
+    public void Setup()
+    {
+            firstFollow = Random.Range(0, GGJGameManager.m_Tanks.Count);
+            Debug.Log("Setting up the bomb. Player #" + firstFollow + " of " + GGJGameManager.m_Tanks.Count + " total");
+            infectedPlayer = GGJGameManager.m_Tanks[firstFollow];
+            infectingPlayer = true;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-
-        transform.position = movement.charPosition;
+        if (infectingPlayer)
+        {
+            transform.position = infectedPlayer.m_Instance.transform.position;
+        }
 
     }
 

@@ -34,7 +34,7 @@ public class movement : NetworkBehaviour {
         //myEnergy.value = 48;
         if (isLocalPlayer)
         {
-            Debug.Log("Setting up local player energy bar and camera");
+            Debug.Log("Setting up local player ("+m_PlayerNumber+") energy bar and camera");
             myEnergy = GameObject.Find("Energy Slider").GetComponent<Slider>();
             myCam = GameObject.Find("CameraRig").GetComponent<CameraControl>();
             myCam.gameObject.transform.parent = this.gameObject.transform;
@@ -42,8 +42,13 @@ public class movement : NetworkBehaviour {
             myCam.SetTarget(this.gameObject);
 
             
+        } else
+        {
+            //transform.gameObject.Find("CameraRig").SetActive(false);
         }
     }
+
+    
 
     void FixedUpdate()
     {
@@ -59,7 +64,7 @@ public class movement : NetworkBehaviour {
         Quaternion inputRotation = Quaternion.Euler(0f, turn, 0f);
 
         // Apply this rotation to the rigidbody's rotation.
-        m_Rigidbody.MoveRotation(m_Rigidbody.rotation * inputRotation);
+       m_Rigidbody.MoveRotation(m_Rigidbody.rotation * inputRotation);
 
     }
 
@@ -75,7 +80,7 @@ public class movement : NetworkBehaviour {
         }
 
         m_TurnInput = Input.GetAxis("Horizontal");
-        m_MovementInput = Input.GetAxis("Vertical")*-1;
+        m_MovementInput = Input.GetAxis("Vertical");
 
 
     }
@@ -100,8 +105,8 @@ public class movement : NetworkBehaviour {
         if (mine == false)
         {
             Debug.Log("Collided");
-            thisObject=this.gameObject;
-            charPosition = thisObject.transform.position;
+            //thisObject=this.gameObject;
+            //charPosition = thisObject.transform.position;
             mine = !mine;
         }
     }
