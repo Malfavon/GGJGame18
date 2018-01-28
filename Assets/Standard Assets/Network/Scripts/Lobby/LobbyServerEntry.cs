@@ -29,6 +29,10 @@ namespace Prototype.NetworkLobby
 
         void JoinMatch(NetworkID networkID, LobbyManager lobbyManager)
         {
+            Debug.Log("JoinMatch triggered "+networkID);
+            if (!lobbyManager._isMatchmaking) {
+                Debug.Log("not matchmaking", lobbyManager);
+                lobbyManager.StartMatchMaker(); }
 			lobbyManager.matchMaker.JoinMatch(networkID, "", "", "", 0, 0, lobbyManager.OnMatchJoined);
 			lobbyManager.backDelegate = lobbyManager.StopClientClbk;
             lobbyManager._isMatchmaking = true;
