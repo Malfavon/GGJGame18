@@ -115,6 +115,7 @@ namespace Prototype.NetworkLobby
             }
             else
             {
+                this.gameObject.GetComponent<Image>().CrossFadeAlpha(0.1f, 1.2f,false);
                 lobbyServerPanel.gameObject.SetActive(false);
                 ChangeTo(null);
 

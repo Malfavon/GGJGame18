@@ -15,6 +15,8 @@ public class CameraControl : MonoBehaviour
     private Vector3 m_MoveVelocity;                 // Reference velocity for the smooth damping of the position.
     private float m_ConvertDistanceToSize;                 // Used to multiply by the offset of the rig to the furthest target.
 
+    public GameObject target;
+
 
     private void Awake()
     {
@@ -28,6 +30,11 @@ public class CameraControl : MonoBehaviour
         SetDistanceToSize();
     }
 
+    public void SetTarget(GameObject t)
+    {
+        target = t;
+        transform.LookAt(target.transform);
+    }
 
     private void SetDistanceToSize()
     {
@@ -55,6 +62,7 @@ public class CameraControl : MonoBehaviour
 
     private void FixedUpdate()
     {
+        return;
         // The camera is moved towards a target position which is returned.
         Vector3 targetPosition = Move();
 
