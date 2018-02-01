@@ -106,7 +106,7 @@ public class PlayerManager
         if (m_Movement.hasAuthority)
         {
             Debug.Log("Setting position to spawn at " + m_SpawnPoint.ToString());
-            m_Movement.m_Rigidbody.position = m_SpawnPoint.position;
+            m_Movement.m_Rigidbody.position = new Vector3(m_SpawnPoint.position.x, 0.2f, m_SpawnPoint.position.z);
             m_Movement.m_Rigidbody.rotation = m_SpawnPoint.rotation;
         }
     }

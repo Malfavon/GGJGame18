@@ -32,6 +32,8 @@ public class movement : NetworkBehaviour {
 
     public float m_TurnSpeed = 180f;
 
+    public bool isDead = false;
+
     private CameraControl myCam;
 
     // Use this for initialization
@@ -122,6 +124,21 @@ public class movement : NetworkBehaviour {
         
     }
 
+    [ClientRpc]
+    public void RpcBombTicker( int pNum, float boomTick)
+    {
+        if (!isLocalPlayer || !isInfected) return;
+        if (isDead) return;
+        myEnergy.value += boomTick;
+        if (myEnergy.value >= 95.0f)
+        {
+            Debug.Log("Player " + m_PlayerNumber + " GO BOOM");
+            isInfected = false;
+            GoBOOM();
+            isDead = true;
+        }
+    }
+
     public void GoBOOM()
     {
         //move player camera to scene so it doesnt get deleted
@@ -146,7 +163,8 @@ public class movement : NetworkBehaviour {
         {
             Debug.Log("Collided");
             //hitBomb(collision.gameObject);
-        } else if(collision.gameObject.tag == "PowerUp" )
+        }
+        else if (collision.gameObject.tag == "PowerUp")
         {
             Debug.Log("POwer UP");
             PowerUpScript pUp = collision.gameObject.GetComponent<PowerUpScript>();
@@ -154,7 +172,14 @@ public class movement : NetworkBehaviour {
             pUpRemaining = pUp.pDuration;
             pUpStrength = pUp.power;
             Destroy(collision.gameObject);
-        } else
+        }
+        else if (isInfected && collision.gameObject.tag == "Player")
+        {
+            Debug.Log("Pass the bomb from player " + m_PlayerNumber + " to player " + collision.gameObject.GetComponent<movement>().m_PlayerNumber);
+            GameObject.Find("bomb").GetComponent<bomb>().PassTheBomb(collision.gameObject.GetComponent<movement>());
+            isInfected = false;
+        }
+        else
         {
             Debug.Log("Collide " + collision.gameObject.name);
         }
@@ -176,4 +201,5 @@ public class movement : NetworkBehaviour {
         isInfected = true;
         b.GetComponent<bomb>().infectingPlayer = true;
     }
+
 }

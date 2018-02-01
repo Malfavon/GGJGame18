@@ -60,13 +60,13 @@ public class bomb : NetworkBehaviour {
         {
            
             transform.position =  new Vector3(infectedPlayer.m_Instance.transform.position.x, infectedPlayer.m_Instance.transform.position.y+1.2f, infectedPlayer.m_Instance.transform.position.z);
-            
-            infectedPlayer.m_Movement.myEnergy.value += Time.deltaTime * boomSpeed;
-            if (infectedPlayer.m_Movement.myEnergy.value >= 95.0f)
+
+            infectedPlayer.m_Movement.RpcBombTicker( infectedPlayer.m_Movement.m_PlayerNumber, Time.deltaTime * boomSpeed);
+            //infectedPlayer.m_Movement.myEnergy.value += Time.deltaTime * boomSpeed;
+            if (infectedPlayer.isDead)
             {
                 Debug.Log("Player " + infectedPlayer.m_Movement.m_PlayerNumber + " GO BOOM");
                 infectedPlayer.isDead = true;
-                infectedPlayer.m_Movement.GoBOOM();
                 GGJGameManager.s_Instance.RemoveTank(infectedPlayer.m_Movement.transform.gameObject);
 
                 infectedPlayer = null;
@@ -92,13 +92,17 @@ public class bomb : NetworkBehaviour {
                     Debug.Log("No more active players to chase");
                     return;
                 }
-            } else if(curDistance < 1 )
+                Vector3 diff = target.transform.position - transform.position;
+                curDistance = diff.sqrMagnitude;
+            }
+
+            if (target != null && curDistance < 1.5 )
             {
-                return;
-                Debug.Log("BOOM");
+                Debug.Log("BOOOOM");
                 infectingPlayer = true;
                 isChasing = false;
                 infectedPlayer = GGJGameManager.FindPlayer(target.GetComponent<movement>().m_PlayerNumber); //GGJGameManager.m_Tanks[target.GetComponent<movement>().m_PlayerNumber];
+                target.GetComponent<movement>().isInfected = true;
                 if (infectedPlayer == null)
                 {
                     target = null;
@@ -114,7 +118,7 @@ public class bomb : NetworkBehaviour {
             {
                 float step = chaseSpeed * Time.deltaTime;
                 Vector3 tPos = target.transform.position;
-                tPos.y = 1.3f; //otherwise will chase players feet
+                tPos.y = 1.1f; //otherwise will chase players feet
                 transform.position = Vector3.MoveTowards(transform.position, tPos, step);
             }
         }
@@ -125,6 +129,22 @@ public class bomb : NetworkBehaviour {
     {
         
         Debug.Log("BOMB Collide " + collision.gameObject.name + " " + (isServer?"isServer":"Not Server") );
+    }
+
+    //a player triggers this when infected and crashes into other player
+    public void PassTheBomb( movement m)
+    {
+        PlayerManager newT = GGJGameManager.FindPlayer(m.m_PlayerNumber);
+        if (newT == null)
+        {
+            Debug.Log("COULD NOT FIND PLAYER TO INFECT");
+            return;
+        }
+        infectedPlayer.m_Movement.isInfected = false;
+        infectingPlayer = false;
+        infectedPlayer = newT;
+        infectedPlayer.m_Movement.RpcHitBomb(gameObject);
+        Debug.Log("Bomb passed");
     }
 
     public GameObject FindClosestPlayer()
