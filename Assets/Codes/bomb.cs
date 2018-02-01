@@ -28,32 +28,35 @@ public class bomb : NetworkBehaviour {
 
     public void Setup()
     {
-            firstFollow = Random.Range(0, GGJGameManager.m_Tanks.Count);
-            Debug.Log("Setting up the bomb. Player #" + firstFollow + " of " + GGJGameManager.m_Tanks.Count + " total");
+            //firstFollow = Random.Range(0, GGJGameManager.m_Tanks.Count);
+            //Debug.Log("Setting up the bomb. Player #" + firstFollow + " of " + GGJGameManager.m_Tanks.Count + " total");
         //infectedPlayer = GGJGameManager.m_Tanks[firstFollow];
         //infectedPlayer.m_Movement.isInfected = true;
         //infectingPlayer = true;
         target = FindClosestPlayer();
         isChasing = true;
 
-        //ignore physics so bomb doesn't knock players off world
+        //ignore physics so bomb doesn't knock players off world - done via layers instead
+        /*
         GameObject[] gos;
         gos = GameObject.FindGameObjectsWithTag("Player");
         Collider bCol = transform.Find("bombPhysics").GetComponent<Collider>();
         foreach (GameObject go in gos)
         {
-            Physics.IgnoreCollision(go.GetComponent<Collider>(), bCol);
+            //Physics.IgnoreCollision(go.GetComponent<Collider>(), bCol);
         }
+        */
     }
 	
 	// Update is called once per frame
 	void Update () {
+        if (!isServer) return;
         if (noActivePlayers) return;
         if (infectedPlayer == null)
         {
             infectingPlayer = false;
         }
-        if (infectingPlayer)
+        if (infectingPlayer && infectedPlayer != null)
         {
            
             transform.position =  new Vector3(infectedPlayer.m_Instance.transform.position.x, infectedPlayer.m_Instance.transform.position.y+1.2f, infectedPlayer.m_Instance.transform.position.z);
@@ -91,21 +94,37 @@ public class bomb : NetworkBehaviour {
                 }
             } else if(curDistance < 1 )
             {
+                return;
                 Debug.Log("BOOM");
                 infectingPlayer = true;
                 isChasing = false;
-                infectedPlayer = GGJGameManager.m_Tanks[target.GetComponent<movement>().m_PlayerNumber];
-                target.GetComponent<movement>().hitBomb(transform.gameObject);
-                return;
+                infectedPlayer = GGJGameManager.FindPlayer(target.GetComponent<movement>().m_PlayerNumber); //GGJGameManager.m_Tanks[target.GetComponent<movement>().m_PlayerNumber];
+                if (infectedPlayer == null)
+                {
+                    target = null;
+                }
+                else
+                {
+                    target.GetComponent<movement>().RpcHitBomb(transform.gameObject);
+                    return;
+                }
             }
 
             if (target != null)
             {
                 float step = chaseSpeed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, step);
+                Vector3 tPos = target.transform.position;
+                tPos.y = 1.3f; //otherwise will chase players feet
+                transform.position = Vector3.MoveTowards(transform.position, tPos, step);
             }
         }
 
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+        Debug.Log("BOMB Collide " + collision.gameObject.name + " " + (isServer?"isServer":"Not Server") );
     }
 
     public GameObject FindClosestPlayer()

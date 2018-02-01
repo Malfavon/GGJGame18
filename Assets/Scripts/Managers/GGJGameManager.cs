@@ -84,6 +84,16 @@ public class GGJGameManager : NetworkBehaviour
         m_Tanks.Add(tmp);
     }
 
+    static public PlayerManager FindPlayer(int PlayerNum)
+    {
+        foreach( PlayerManager p in m_Tanks)
+        {
+            if (p.m_PlayerNumber == PlayerNum) return p;
+        }
+
+        return null;
+    }
+
     public void resetPowerUps()
     {
         foreach( PowerUpScript ps in m_PowerUps)
@@ -249,6 +259,7 @@ public class GGJGameManager : NetworkBehaviour
         //notify clients that the round is now started, they should allow player to move.
        
         RpcRoundPlaying();
+        EnableTankControl();
 
         // While there is not one tank left...
         while (!OneTankLeft())

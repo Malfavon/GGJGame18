@@ -145,7 +145,7 @@ public class movement : NetworkBehaviour {
         if (isInfected == false && collision.gameObject.name == "bomb")
         {
             Debug.Log("Collided");
-            hitBomb(collision.gameObject);
+            //hitBomb(collision.gameObject);
         } else if(collision.gameObject.tag == "PowerUp" )
         {
             Debug.Log("POwer UP");
@@ -160,15 +160,19 @@ public class movement : NetworkBehaviour {
         }
     }
 
-    public void hitBomb( GameObject b)
+    [ClientRpc]
+    public void RpcHitBomb( GameObject b)
     {
+        /* this needs to be handled by server controlling bomb
         if (b.GetComponent<bomb>().infectingPlayer)
         {
             b.GetComponent<bomb>().infectedPlayer.m_Movement.isInfected = false;
             b.GetComponent<bomb>().infectedPlayer.m_Movement.myEnergy.value = 0;
         }
+        */
 
-        b.GetComponent<bomb>().infectedPlayer = GGJGameManager.m_Tanks[m_PlayerNumber];
+        b.GetComponent<bomb>().infectedPlayer = GGJGameManager.FindPlayer(m_PlayerNumber); //GGJGameManager.m_Tanks[m_PlayerNumber];
+        if (b.GetComponent<bomb>().infectedPlayer == null) return;
         isInfected = true;
         b.GetComponent<bomb>().infectingPlayer = true;
     }

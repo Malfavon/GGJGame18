@@ -76,7 +76,7 @@ public class PlayerManager
         m_Movement.transform.LookAt(GameObject.Find("bomb").transform);
         Debug.Log("Unfreezing rigidbody");
         m_Movement.enabled = true;
-        m_Movement.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        m_Movement.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezePositionY;
         //m_Shooting.enabled = true;
 
     }
