@@ -15,6 +15,14 @@ public class CameraControl : MonoBehaviour
     private Vector3 m_MoveVelocity;                 // Reference velocity for the smooth damping of the position.
     private float m_ConvertDistanceToSize;                 // Used to multiply by the offset of the rig to the furthest target.
 
+    public float mouseSensitivity = 60.0f;
+    public float clampAngle = 30.0f;
+    public float rotY = 0.0f; // rotation around the up/y axis
+    public float rotX = 0.0f; // rotation around the right/x axis
+    public float clampX = 40f;
+    public float clampY = 30f;
+    public float mouseS = 6.0f; //hard coded mouse sensitivyt
+
     public GameObject target;
 
 
@@ -28,6 +36,11 @@ public class CameraControl : MonoBehaviour
     private void Start()
     {
         SetDistanceToSize();
+
+        target = transform.parent.gameObject;
+        //Vector3 rot = transform.localRotation.eulerAngles;
+        rotY = 0f;
+        rotX = 0f;
     }
 
     public void SetTarget(GameObject t)
@@ -35,6 +48,22 @@ public class CameraControl : MonoBehaviour
         target = t;
         Vector3 newLook = new Vector3(target.transform.position.x, target.transform.position.y + 1.5f, target.transform.position.z);
         m_Camera.transform.LookAt(newLook);
+    }
+
+    private void Update()
+    {
+        if (target == null) return;
+        float mouseX = Input.GetAxis("Horizontal1");
+        float mouseY = -Input.GetAxis("Vertical1");
+
+        rotX += mouseX * mouseS ;
+        rotY += mouseY * mouseS ;
+
+        rotX = Mathf.Clamp(rotX, -clampX, clampX);
+        //rotY = Mathf.Clamp(rotY, -clampY, clampY) + 10.0f;
+
+        Quaternion localRotation = Quaternion.Euler(target.transform.rotation.eulerAngles.x+rotX , target.transform.rotation.eulerAngles.y , target.transform.rotation.eulerAngles.z);
+        transform.rotation = transform.rotation = Quaternion.Slerp(transform.rotation, localRotation, Time.deltaTime * 2.0f); ;
     }
 
     private void SetDistanceToSize()
@@ -140,14 +169,14 @@ public class CameraControl : MonoBehaviour
         float furthestDistance = 0f;
 
         // Go through all the targets and if they are further away use that distance instead.
-        for (int i = 0; i < GameManager.m_Tanks.Count; i++)
+        for (int i = 0; i < GGJGameManager.m_Tanks.Count; i++)
         {
             // If the target isn't active, on to the next one.
-            if (!GameManager.m_Tanks[i].m_Instance.activeSelf)
+            if (GGJGameManager.m_Tanks[i].m_Instance.activeSelf)
                 continue;
 
             // Find the distance from the camera's desired position to the target.
-            float targetDistance = (desiredPosition - GameManager.m_Tanks[i].m_Instance.transform.position).magnitude;
+            float targetDistance = (desiredPosition - GGJGameManager.m_Tanks[i].m_Instance.transform.position).magnitude;
 
             // If it's greater than the current furthest distance, it's the furthest distance.
             if (targetDistance > furthestDistance)

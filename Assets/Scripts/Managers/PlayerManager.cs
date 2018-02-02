@@ -38,6 +38,7 @@ public class PlayerManager
         //m_Shooting = m_Instance.GetComponent<TankShooting>();
         //m_Health = m_Instance.GetComponent<TankHealth>();
         m_Setup = m_Instance.GetComponent<PlayerSetup>();
+        
 
         // Get references to the child objects.
         //m_TankRenderers = m_Health.m_TankRenderers;
@@ -106,7 +107,10 @@ public class PlayerManager
         if (m_Movement.hasAuthority)
         {
             Debug.Log("Setting position to spawn at " + m_SpawnPoint.ToString());
-            m_Movement.m_Rigidbody.position = new Vector3(m_SpawnPoint.position.x, 0.2f, m_SpawnPoint.position.z);
+            RigidbodyConstraints oConst = m_Movement.m_Rigidbody.constraints;
+            m_Movement.m_Rigidbody.constraints = RigidbodyConstraints.None;
+            m_Movement.m_Rigidbody.position = new Vector3(m_SpawnPoint.position.x, -0.2f, m_SpawnPoint.position.z);
+            m_Movement.m_Rigidbody.constraints = oConst;
             m_Movement.m_Rigidbody.rotation = m_SpawnPoint.rotation;
         }
     }

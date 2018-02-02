@@ -8,7 +8,7 @@ public class SmoothCamera : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+        Target = transform.parent.parent;
 	}
 	
 	// Update is called once per frame

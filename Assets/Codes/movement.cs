@@ -14,6 +14,7 @@ public class movement : NetworkBehaviour {
     public bool isInfected = false;
     private float energy; //variable para almacenar energia acumulada del personaje
     public Slider myEnergy; //slider que mostrara cuanta energia has acumulado
+    public float energyLvl = 0f;
     public static GameObject thisObject;
 
     public int m_PlayerNumber = 1;                // Used to identify which player this object belongs to
@@ -40,6 +41,7 @@ public class movement : NetworkBehaviour {
     void Start () {
         m_Rigidbody = GetComponent<Rigidbody>();
         //myEnergy.value = 48;
+        energyLvl = 0;
         if (isLocalPlayer)
         {
             Debug.Log("Setting up local player ("+m_PlayerNumber+") energy bar and camera");
@@ -127,10 +129,12 @@ public class movement : NetworkBehaviour {
     [ClientRpc]
     public void RpcBombTicker( int pNum, float boomTick)
     {
-        if (!isLocalPlayer || !isInfected) return;
+        if (!isInfected) return;
         if (isDead) return;
-        myEnergy.value += boomTick;
-        if (myEnergy.value >= 95.0f)
+        if (!isLocalPlayer) return;
+        energyLvl += boomTick;
+        if (isLocalPlayer) myEnergy.value = energyLvl;
+        if ( energyLvl>= 95.0f)
         {
             Debug.Log("Player " + m_PlayerNumber + " GO BOOM");
             isInfected = false;
@@ -144,10 +148,13 @@ public class movement : NetworkBehaviour {
         //move player camera to scene so it doesnt get deleted
         Transform cam = transform.Find("CameraRig");
         if (!cam) return;
-        cam.gameObject.name = "DeadCamera";
-        cam.parent = null;
-        cam.position = new Vector3(0.0f, 10.0f, 0.0f);
-        cam.Find("Main Camera").LookAt(transform);
+        if (isLocalPlayer)
+        {
+            cam.gameObject.name = "DeadCamera";
+            cam.parent = null;
+            cam.position = new Vector3(0.0f, 10.0f, 0.0f);
+            cam.Find("Main Camera").LookAt(transform);
+        }
         this.gameObject.SetActive(false);
         //Destroy(this.gameObject, 1);
         GameObject.Find("Canvas").GetComponent<AudioSource>().Stop();
@@ -186,7 +193,7 @@ public class movement : NetworkBehaviour {
     }
 
     [ClientRpc]
-    public void RpcHitBomb( GameObject b)
+    public void RpcHitBomb( int pNum, GameObject b)
     {
         /* this needs to be handled by server controlling bomb
         if (b.GetComponent<bomb>().infectingPlayer)
@@ -195,11 +202,12 @@ public class movement : NetworkBehaviour {
             b.GetComponent<bomb>().infectedPlayer.m_Movement.myEnergy.value = 0;
         }
         */
-
-        b.GetComponent<bomb>().infectedPlayer = GGJGameManager.FindPlayer(m_PlayerNumber); //GGJGameManager.m_Tanks[m_PlayerNumber];
-        if (b.GetComponent<bomb>().infectedPlayer == null) return;
+        Debug.Log("RPC Hit Bomb");
+        if (this.m_PlayerNumber != pNum) return;
+        //b.GetComponent<bomb>().infectedPlayer = GGJGameManager.FindPlayer(m_PlayerNumber); //GGJGameManager.m_Tanks[m_PlayerNumber];
+        //if (b.GetComponent<bomb>().infectedPlayer == null) return;
         isInfected = true;
-        b.GetComponent<bomb>().infectingPlayer = true;
+        //b.GetComponent<bomb>().infectingPlayer = true;
     }
 
 }

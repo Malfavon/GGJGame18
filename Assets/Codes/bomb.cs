@@ -58,24 +58,28 @@ public class bomb : NetworkBehaviour {
         }
         if (infectingPlayer && infectedPlayer != null)
         {
-           
-            transform.position =  new Vector3(infectedPlayer.m_Instance.transform.position.x, infectedPlayer.m_Instance.transform.position.y+1.2f, infectedPlayer.m_Instance.transform.position.z);
-
-            infectedPlayer.m_Movement.RpcBombTicker( infectedPlayer.m_Movement.m_PlayerNumber, Time.deltaTime * boomSpeed);
-            //infectedPlayer.m_Movement.myEnergy.value += Time.deltaTime * boomSpeed;
-            if (infectedPlayer.isDead)
+            if (infectedPlayer.m_Movement.isDead)
             {
                 Debug.Log("Player " + infectedPlayer.m_Movement.m_PlayerNumber + " GO BOOM");
                 infectedPlayer.isDead = true;
                 GGJGameManager.s_Instance.RemoveTank(infectedPlayer.m_Movement.transform.gameObject);
-
                 infectedPlayer = null;
                 infectingPlayer = false;
                 isChasing = true;
-                
+
+            }
+            else
+            {
+                isChasing = false;
+                transform.position = new Vector3(infectedPlayer.m_Instance.transform.position.x, infectedPlayer.m_Instance.transform.position.y + 1.2f, infectedPlayer.m_Instance.transform.position.z);
+
+                infectedPlayer.m_Movement.RpcBombTicker(infectedPlayer.m_Movement.m_PlayerNumber, Time.deltaTime * boomSpeed);
+                //infectedPlayer.m_Movement.myEnergy.value += Time.deltaTime * boomSpeed;
             }
             
-        } else if(isChasing  )
+        }
+
+        if (isChasing  )
         {
             float curDistance = 0f;
             if (target != null && target.activeSelf)
@@ -105,11 +109,12 @@ public class bomb : NetworkBehaviour {
                 target.GetComponent<movement>().isInfected = true;
                 if (infectedPlayer == null)
                 {
+                    Debug.Log("Did not find infected player");
                     target = null;
                 }
                 else
                 {
-                    target.GetComponent<movement>().RpcHitBomb(transform.gameObject);
+                    target.GetComponent<movement>().RpcHitBomb(target.GetComponent<movement>().m_PlayerNumber, transform.gameObject);
                     return;
                 }
             }
@@ -143,7 +148,7 @@ public class bomb : NetworkBehaviour {
         infectedPlayer.m_Movement.isInfected = false;
         infectingPlayer = false;
         infectedPlayer = newT;
-        infectedPlayer.m_Movement.RpcHitBomb(gameObject);
+        infectedPlayer.m_Movement.RpcHitBomb(m.m_PlayerNumber, gameObject);
         Debug.Log("Bomb passed");
     }
 

@@ -36,7 +36,7 @@ public class TankSetup : NetworkBehaviour
         base.OnStartClient();
 
         if (!isServer) //if not hosting, we had the tank to the gamemanger for easy access!
-            GameManager.AddTank(gameObject, m_PlayerNumber, m_Color, m_PlayerName, m_LocalID);
+            GGJGameManager.AddTank(gameObject, m_PlayerNumber, m_Color, m_PlayerName, m_LocalID);
 
         GameObject m_TankRenderers = transform.Find("TankRenderers").gameObject;
 
@@ -65,7 +65,7 @@ public class TankSetup : NetworkBehaviour
             return;
         }
 
-        if (GameManager.s_Instance.m_GameIsFinished && !m_IsReady)
+        if (GGJGameManager.s_Instance.m_GameIsFinished && !m_IsReady)
         {
             if(Input.GetButtonDown("Fire"+(m_LocalID + 1)))
             {
@@ -99,6 +99,6 @@ public class TankSetup : NetworkBehaviour
 
     public override void OnNetworkDestroy()
     {
-        GameManager.s_Instance.RemoveTank(gameObject);
+        GGJGameManager.s_Instance.RemoveTank(gameObject);
     }
 }
